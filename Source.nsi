@@ -4,9 +4,9 @@ RequestExecutionLevel admin
 !define AppName "LoLSKINUPDATER"
 !define START_MENU "LoL Skin"
 !define MUI_ICON "lolskin.ico"
-;!define MUI_UI "${NSISDIR}\Contrib\UIs\modern_12.exe"
+!define MUI_UI "form/modern.exe"
 Name "${AppName}"
-; General Symbol Definitions
+
 !define COMPANY         "CoolSoft"
 !define PRODUCT         "CoolSoft NSISDialogDesigner Test"
 !define URL             "http://coolsoft.altervista.org/nsisdialogdesigner"
