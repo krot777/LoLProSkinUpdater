@@ -1,49 +1,49 @@
-; The name of the installer
-RequestExecutionLevel admin
-!include "FileFunc.nsh"
-!define AppName "LoLSKINUPDATER"
+
+!define AppName "LoLProSkinUpdater"
 !define START_MENU "LoL Skin"
-!define MUI_ICON "lolskin.ico"
+!define MUI_ICON "img/lolskin.ico"
 !define MUI_UI "form/modern.exe"
-Name "${AppName}"
+!define AppVersion "1.03.01.0"
+!define AppDev "by Shen0x440"
+!define AppSite "https://github.com/krot777/LoLCS"
+!define AppDescription "If you use a program to install skins Skin LoL Pro, League of Legends ,you know that the update it requires you to visit the website LoL Skin and wait to receive download links.With this tool everything will be simple you just need to click the Download(update) you will have updated LoL Skin."
 
-!define COMPANY         "CoolSoft"
-!define PRODUCT         "CoolSoft NSISDialogDesigner Test"
-!define URL             "http://coolsoft.altervista.org/nsisdialogdesigner"
+VIProductVersion "${AppVersion}"
+VIAddVersionKey ProductName "${AppName}"
+VIAddVersionKey ProductVersion "${AppVersion}"
+VIAddVersionKey Developer "${AppDev}"
+VIAddVersionKey AppWebsite "${AppSite}"
+VIAddVersionKey FileVersion "${AppVersion}"
+VIAddVersionKey FileDescription "${AppDescription}"
+VIAddVersionKey LegalCopyright "Freeware"
 
-VIProductVersion "0.0.0.0"
-VIAddVersionKey ProductName "${PRODUCT}"
-VIAddVersionKey ProductVersion "0.0.0.0"
-VIAddVersionKey CompanyName "${COMPANY}"
-VIAddVersionKey CompanyWebsite "${URL}"
-VIAddVersionKey FileVersion "0.0.0.0"
-VIAddVersionKey FileDescription ""
-VIAddVersionKey LegalCopyright ""
 
-; installer properties
 XPStyle on
-
-; The file to write
+Name "${AppName}"
+RequestExecutionLevel admin
 OutFile "${AppName}.exe"
 SetOverwrite on
 
-; MUI Symbol Definitions
+;=======include =====
+!include "FileFunc.nsh"
 !include Sections.nsh
 !include MUI2.nsh
 !insertmacro MUI_LANGUAGE English
 
 
-; handle variables
+;======Handle variables
 Var form_1
 Var GroupBox
 Var lblAbout
-Var btnExit
+;Var btnExit Disabled exit button
 Var btnUnistall
 Var btnUpdate
 Var btnRun
-Var hCtl_form_1_Bitmap1
-Var hCtl_form_1_Bitmap1_hImage
+Var HeaderBMP
+Var HeaderBMP_hImage
 Var Ena
+
+
 ; dialog create function
 Function form_1_Create
 
@@ -59,7 +59,7 @@ Function form_1_Create
 
 
   ; === lblAbout (type: Label) ===
-  ${NSD_CreateLabel} 57.27u 161.23u 65.82u 8.62u "1.0.3"
+  ${NSD_CreateLabel} 57.27u 161.23u 65.82u 8.62u "${AppVersion}"
   Pop $lblAbout
   ${NSD_OnClick} $lblAbout onClickAboutMessage
 
@@ -86,15 +86,15 @@ Function form_1_Create
   ${NSD_OnClick} $btnRun onClickUpApp
 
   ${NSD_CreateBitmap} -4.61u -0.62u 219.19u 46.77u ""
-  Pop $hCtl_form_1_Bitmap1
+  Pop $HeaderBMP
 
-  ${NSD_SetImage} $hCtl_form_1_Bitmap1 "$PLUGINSDIR\header_1.bmp" $hCtl_form_1_Bitmap1_hImage
+  ${NSD_SetImage} $HeaderBMP "$PLUGINSDIR\header_1.bmp" $HeaderBMP_hImage
 
   ; === Bitmap1 (type: Bitmap) ===
   ${NSD_CreateBitmap} 7.9u -0.62u 219.19u 46.77u ""
-  Pop $hCtl_form_1_Bitmap1
-  File "/oname=$PLUGINSDIR\header_1.bmp" "D:\Project\lolskin\header_1.bmp"
-  ${NSD_SetImage} $hCtl_form_1_Bitmap1 "$PLUGINSDIR\header_1.bmp" $hCtl_form_1_Bitmap1_hImage
+  Pop $HeaderBMP
+  File "/oname=$PLUGINSDIR\header_1.bmp" "img\header_1.bmp"
+  ${NSD_SetImage} $HeaderBMP "$PLUGINSDIR\header_1.bmp" $HeaderBMP_hImage
 
 FunctionEnd
 
@@ -110,19 +110,22 @@ Call ClearKash
 Processes::KillProcess "LoLSKINUPDATER.exe"
 Call .onGUIEnd
 FunctionEnd
+
 Function onClickUnApp
 Call RemoveApp
 FunctionEnd
+
 Function onClickUpdate
 Call DownloadLOLSkin
 Call Writebat
 Call Copy
 FunctionEnd
+
 Function onClickUpApp
 Call Launch
 FunctionEnd
 Function onClickAboutMessage
-MessageBox MB_OK "Build by Shen $\n 14/03/2019 $\n version 1.03"
+MessageBox MB_OK "Build by Shen $\n 14/03/2019 $\n version ${AppVersion}"
 FunctionEnd
 
 
@@ -130,7 +133,7 @@ FunctionEnd
 Function DownloadLOLSkin
   inetc::get /POPUP "" /CAPTION "App.zip" "http://dl2.modskinpro.com/LEAGUESKIN_8.3.zip" "$TEMP\LOLSKIN\App.zip"
     Pop $0 # return value = exit code, "OK" if OK
-    MessageBox MB_OK "Download Status: $0"
+  ;  MessageBox MB_OK "Download Status: $0"
 FunctionEnd
 
 Function "Writebat"
@@ -143,16 +146,23 @@ Delete "$TEMP\LOLSKIN\*.exe"
 FunctionEnd
 
 
+Function ReBootApp
+Processes::KillProcess "LoLSKINUPDATER.exe"
+nsExec::Exec "C:\Fraps\${AppName}.exe"
+FunctionEnd
+
 Function Copy
 CreateDirectory "C:\Fraps"
 CopyFiles /SILENT "$TEMP\LOLSKIN\Fraps\*" "C:\Fraps"
 CopyFiles /SILENT "$EXEDIR\${AppName}.exe" "C:\Fraps"
 ;CreateShortCut "$Desktop\LOL Skin.lnk" "C:\Fraps\LOLPRO.exe"
  CreateDirectory "$SMPROGRAMS\${START_MENU}"
-  CreateShortCut "$SMPROGRAMS\${START_MENU}\LOL Skin.lnk" "C:\Fraps\LOLPRO.exe"
+CreateShortCut "$SMPROGRAMS\${START_MENU}\LOL Skin.lnk" "C:\Fraps\LOLPRO.exe"
   CreateShortCut "$SMPROGRAMS\${START_MENU}\${AppName}.lnk" "C:\Fraps\${AppName}.exe"
 
 RMdir /r "$TEMP\LOLSKIN\Fraps"
+MessageBox MB_OK "Enjoy!"
+
 FunctionEnd
 
 
@@ -197,15 +207,12 @@ StrCpy $Ena "1"
 NotFiles:
 StrCpy $0 "Download"
 StrCpy $Ena "0"
-
-
 Done:
-
 CreateDirectory "$TEMP\LOLSKIN"
     InitPluginsDir
    ;Get the skin file to use
-     File "/oname=$PLUGINSDIR\header_1.bmp" "D:\Project\lolskin\header_1.bmp"
-   File /oname=$PLUGINSDIR\Amakrits.vsf "CyanNight.vsf"
+     File "/oname=$PLUGINSDIR\header_1.bmp" "img\header_1.bmp"
+   File /oname=$PLUGINSDIR\Amakrits.vsf "vcl\CyanNight.vsf"
    ;Load the skin using the LoadVCLStyleA function
    NSISVCLStyles::LoadVCLStyle $PLUGINSDIR\Amakrits.vsf
 
