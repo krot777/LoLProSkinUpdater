@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!--
+This file was created by NSISDialogDesigner 1.4.3.0
+http://coolsoft.altervista.org/nsisdialogdesigner
+Do not edit manually!
+-->
+<Dialog Name="form_1" Title="Dialog title..." DialogUI="custom" DialogID="1018" Size="452, 328" Subtitle="Dialog subtitle...">
+  <GroupBox Name="GroupBox1" Location="22, 96" Size="196, 192" Text="GroupBox1" TabIndex="0">
+    <Button Name="btnUnistall" Location="19, 116" Size="146, 44" Text="Unistall LoL skin" TabIndex="0" Enabled="False" onClick="onClickUnApp" />
+    <Label Name="lblAbout" Location="49, 175" Size="100, 14" Text="1.0.2" TabIndex="1" ExStyle="WS_EX_TRANSPARENT" onClick="onClickAboutMessage" />
+    <Button Name="btnUpdate" Location="19, 68" Size="146, 44" Text="Update" TabIndex="2" onClick="onClickUpdate" />
+    <Button Name="btnRun" Location="19, 18" Size="146, 44" Text="Run" TabIndex="3" onClick="onClickUpApp" />
+  </GroupBox>
+  <Bitmap Name="Bitmap1" Location="12, -1" Size="333, 76" ImageFilename="D:\Project\lolskin\header_1.bmp" TabIndex="1" />
+</Dialog>
